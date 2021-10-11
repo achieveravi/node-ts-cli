@@ -1,16 +1,24 @@
-import express, {Request, Response, Application} from 'express';
-import { PORT } from './config';
-import { userRouter } from './routes';
+#!/usr/bin/env node
 
-const app: Application = express();
+import chalk from 'chalk';
+import boxen, {Options} from 'boxen';
+import yargs from 'yargs';
 
-app.use(express.json());
 
-app.use('/user', userRouter);
+const options = yargs
+.usage('Usage -n name')
+.option('n', {alias: 'name', description: 'Your Name', type: 'string', demandOption: true})
+.argv;
 
-app.get('/', (req: Request, res: Response): void => {
-    res.send('Hello World');
-})
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-});
+const greeting = chalk.white.bold(`hello! ${(options as any).name}`);
+const boxenOptions: Options = {
+    padding: 1,
+    margin: 1,
+    borderStyle: 'round',
+    borderColor: 'green',
+    backgroundColor: 'red'
+}
+
+const messageBox = boxen(greeting, boxenOptions);
+
+console.log(messageBox);
